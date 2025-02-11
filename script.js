@@ -93,3 +93,36 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmationSection.style.display = "block";
     });
   });
+  // Results Page Logic
+document.addEventListener("DOMContentLoaded", function () {
+    const latestNumbersElement = document.getElementById("latest-numbers");
+    const pastResultsTableBody = document.querySelector("#past-results tbody");
+  
+    // Simulate fetching latest winning numbers
+    setTimeout(() => {
+      const latestNumbers = [7, 14, 21, 28, 35, 42]; // Example numbers
+      latestNumbersElement.textContent = latestNumbers.join(", ");
+    }, 1000);
+  
+    // Simulate fetching past results
+    setTimeout(() => {
+      const pastResults = [
+        { date: "2023-10-01", numbers: [3, 12, 19, 27, 34, 41] },
+        { date: "2023-09-25", numbers: [5, 11, 18, 22, 33, 40] },
+        { date: "2023-09-18", numbers: [2, 9, 17, 25, 32, 39] },
+      ];
+  
+      pastResults.forEach(result => {
+        const row = document.createElement("tr");
+        const dateCell = document.createElement("td");
+        const numbersCell = document.createElement("td");
+  
+        dateCell.textContent = result.date;
+        numbersCell.textContent = result.numbers.join(", ");
+  
+        row.appendChild(dateCell);
+        row.appendChild(numbersCell);
+        pastResultsTableBody.appendChild(row);
+      });
+    }, 1500);
+  });
