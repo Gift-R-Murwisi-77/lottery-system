@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottery System - Buy Ticket</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Buy a Lottery Ticket</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+      <a href="ticket.html">Buy Ticket</a>
+      <a href="results.html">Results</a>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h2>Select Your Numbers</h2>
+      <form id="ticket-form">
+        <div id="number-inputs">
+          <!-- Number inputs will be generated here -->
+        </div>
+        <button type="button" id="generate-numbers" class="button">Generate Random Numbers</button>
+        <button type="submit" class="button">Submit</button>
+      </form>
+      <div id="confirmation" style="display: none;">
+        <h3>Your Ticket:</h3>
+        <p id="ticket-numbers"></p>
+        <p>Thank you for playing! Good luck!</p>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
