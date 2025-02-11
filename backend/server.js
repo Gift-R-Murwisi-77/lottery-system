@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 connectDB();
 
 // Routes
-app.use("/api/auth", require("./routes/auth")); // Authentication routes
-app.use("/api/ticket", require("./routes/ticket")); // Ticket routes
-app.use("/api/result", require("./routes/result")); // Result routes
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/ticket", require("./routes/ticket"));
+app.use("/api/result", require("./routes/result"));
 
 // Start the server
 const PORT = process.env.PORT || 5000;
