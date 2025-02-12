@@ -1,66 +1,98 @@
+
+
 // Login script
-document.getElementById("login-form").addEventListener("submit", async function (event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  const loginForm = document.getElementById("login-form");
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  if (loginForm) {
+    loginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-      const data = await response.json();
+      console.log("Form submitted:", { email, password });
 
-      if (response.ok) {
-        alert("Login successful! Redirecting to the homepage...");
-        window.location.href = "index.html";
-      } else {
-        alert(data.error || "Login failed");
+      try {
+        console.log("Sending login request...");
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        console.log("Response received:", response);
+
+        const data = await response.json();
+        console.log("Response data:", data);
+
+        if (response.ok) {
+          alert("Login successful! Redirecting to the homepage...");
+          window.location.href = "index.html";
+        } else {
+          alert(data.error || "Login failed");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
       }
-    } catch (error) {
-      alert("An error occurred. Please try again.");
-    }
-  });
+    });
+  } else {
+    console.error("Login form not found!");
+  }
+});
 
   //Register form
 
-  document.getElementById("register-form").addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const fullName = document.getElementById("fullname").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirm-password").value;
-
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ fullName, email, password }),
+  document.addEventListener("DOMContentLoaded", function () {
+    const registerForm = document.getElementById("register-form");
+  
+    if (registerForm) {
+      registerForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+  
+        const fullName = document.getElementById("fullname").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+  
+        console.log("Form submitted:", { fullName, email, password, confirmPassword });
+  
+        if (password !== confirmPassword) {
+          alert("Passwords do not match.");
+          return;
+        }
+  
+        try {
+          console.log("Sending registration request...");
+          const response = await fetch("http://localhost:5000/api/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fullName, email, password }),
+          });
+  
+          console.log("Response received:", response);
+  
+          const data = await response.json();
+          console.log("Response data:", data);
+  
+          if (response.ok) {
+            alert("Registration successful! Redirecting to the login page...");
+            window.location.href = "login.html";
+          } else {
+            alert(data.error || "Registration failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again.");
+        }
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Registration successful! Redirecting to the login page...");
-        window.location.href = "login.html";
-      } else {
-        alert(data.error || "Registration failed");
-      }
-    } catch (error) {
-      alert("An error occurred. Please try again.");
+    } else {
+      console.error("Register form not found!");
     }
   });
 
@@ -170,7 +202,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
     fetchPastResults();
   });
 
-
+  
 
 
 
@@ -205,6 +237,8 @@ document.getElementById("login-form").addEventListener("submit", async function 
 
 
 /*
+
+
 // Simulate fetching winning numbers from a server
 document.addEventListener("DOMContentLoaded", function () {
     const winningNumbersElement = document.getElementById("winning-numbers");
