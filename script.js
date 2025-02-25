@@ -11,10 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      console.log("Form submitted:", { email, password });
-
       try {
-        console.log("Sending login request...");
         const response = await fetch("http://localhost:5000/api/auth/login", {
           method: "POST",
           headers: {
@@ -23,24 +20,21 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ email, password }),
         });
 
-        console.log("Response received:", response);
-
         const data = await response.json();
-        console.log("Response data:", data);
 
         if (response.ok) {
+          // Store the userId in localStorage
+          localStorage.setItem("userId", data.userId);
+
           alert("Login successful! Redirecting to the homepage...");
           window.location.href = "index.html";
         } else {
           alert(data.error || "Login failed");
         }
       } catch (error) {
-        console.error("Error:", error);
         alert("An error occurred. Please try again.");
       }
     });
-  } else {
-    console.error("Login form not found!");
   }
 });
 
@@ -99,53 +93,68 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //ticket form
 
-    // Generate 6 number inputs
-    const numberInputsContainer = document.getElementById("number-inputs");
-    for (let i = 0; i < 6; i++) {
-      const input = document.createElement("input");
-      input.type = "number";
-      input.min = 1;
-      input.max = 49;
-      input.required = true;
-      numberInputsContainer.appendChild(input);
-    }
+  document.addEventListener("DOMContentLoaded", function () {
+    const ticketForm = document.getElementById("ticket-form");
   
-    // Generate random numbers
-    document.getElementById("generate-numbers").addEventListener("click", function () {
-      const inputs = numberInputsContainer.querySelectorAll("input");
-      inputs.forEach(input => {
-        input.value = Math.floor(Math.random() * 49) + 1;
-      });
-    });
-  
-    // Handle form submission
-    document.getElementById("ticket-form").addEventListener("submit", async function (event) {
-      event.preventDefault();
-  
-      const inputs = numberInputsContainer.querySelectorAll("input");
-      const numbers = Array.from(inputs).map(input => parseInt(input.value));
-  
-      try {
-        const response = await fetch("http://localhost:5000/api/ticket/buy", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: "USER_ID_HERE", numbers }), // Replace USER_ID_HERE with the actual user ID
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          document.getElementById("ticket-numbers").textContent = numbers.join(", ");
-          document.getElementById("confirmation").style.display = "block";
-        } else {
-          alert(data.error || "Failed to purchase ticket");
-        }
-      } catch (error) {
-        alert("An error occurred. Please try again.");
+    if (ticketForm) {
+      // Generate 6 number inputs
+      const numberInputsContainer = document.getElementById("number-inputs");
+      for (let i = 0; i < 6; i++) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = 1;
+        input.max = 49;
+        input.required = true;
+        numberInputsContainer.appendChild(input);
       }
-    });
+  
+      // Generate random numbers
+      document.getElementById("generate-numbers").addEventListener("click", function () {
+        const inputs = numberInputsContainer.querySelectorAll("input");
+        inputs.forEach(input => {
+          input.value = Math.floor(Math.random() * 49) + 1;
+        });
+      });
+  
+      // Handle ticket form submission
+      ticketForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+  
+        const inputs = numberInputsContainer.querySelectorAll("input");
+        const numbers = Array.from(inputs).map(input => parseInt(input.value));
+  
+        // Get the userId from localStorage
+        const userId = localStorage.getItem("userId");
+  
+        if (!userId) {
+          alert("You must be logged in to purchase a ticket.");
+          window.location.href = "login.html";
+          return;
+        }
+  
+        try {
+          const response = await fetch("http://localhost:5000/api/ticket/buy", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, numbers }),
+          });
+  
+          const data = await response.json();
+  
+          if (response.ok) {
+            document.getElementById("ticket-numbers").textContent = numbers.join(", ");
+            document.getElementById("confirmation").style.display = "block";
+          } else {
+            alert(data.error || "Failed to purchase ticket");
+          }
+        } catch (error) {
+          alert("An error occurred. Please try again.");
+        }
+      });
+    }
+  });
 
 
     // Results Page Logic
